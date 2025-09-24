@@ -35,6 +35,10 @@
     - si hay dependencia o no con temas funcionales
     - si la libreria deberia ser un 
 
+# Pruebas
+- Para probar flujo de error, enviar mensaje 'error' sin comillas
+
+
 # TO-DO
 - Documentar un poco las diferencias entre el MonitoringProxy y el MonitoringWrapper
 
