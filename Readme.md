@@ -8,8 +8,10 @@
 - probar error - ok 
 - crear un diagrama sencillo para explicar
 - probar proyecto en la VDI
-- usar tuplas para flujo error y ok( optional) 
+- probar strategy para headers propagation 
 - En las ultimas pruebas, se observa que en los headers aparentemente se propaga el contexto de reactor, hacer pruebas de esto
+- usar tuplas para flujo error y ok
+
 
 # Flujo General
 - camino feliz
