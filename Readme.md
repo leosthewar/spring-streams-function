@@ -32,3 +32,10 @@
 - Validar / proponer alcance de la libreria
     - si hay dependencia o no con temas funcionales
     - si la libreria deberia ser un 
+
+# TO-DO
+- Documentar un poco las diferencias entre el MonitoringProxy y el MonitoringWrapper
+
+# Links
+https://projectreactor.io/docs/core/release/reference/advanced-contextPropagation.html
+https://4comprehension.com/ultimate-guide-to-project-reactor-thread-locals-and-context-propagation/
