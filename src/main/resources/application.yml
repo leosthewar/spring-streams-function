@@ -1,0 +1,63 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: spring-streams-function
+
+  cloud:
+    function:
+      #definition: processMessage;processMessageDecorator
+      definition: processMessageDecorator;consumeMessage
+
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+          auto-create-topics: true
+          auto-add-partitions: true
+
+      bindings:
+        # Input binding for the processMessage function
+        processMessage-in-0:
+          destination: input-topic
+          content-type: text/plain
+          group: message-processing-group
+
+        # Output binding for the processMessage function
+        processMessage-out-0:
+          destination: output-topic
+          content-type: text/plain
+
+        processMessageDecorator-in-0:
+          destination: input-topic
+          content-type: text/plain
+          group: message-processing-group
+
+        processMessageDecorator-out-0:
+          destination: output-topic
+          content-type: text/plain
+
+        consumeMessage-in-0:
+          destination: input-topic
+          content-type: text/plain
+          group: message-consuming-group
+
+        monitoring-out-0:
+          destination: monitoring-topic
+          content-type: application/json
+
+logging:
+  level:
+    org.springframework.cloud.stream: DEBUG
+    org.apache.kafka: INFO
+    com.leosdev: DEBUG
+    org.springframework.cloud.function: DEBUG
+
+    com.leosdev.springstreamsfunction: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,bindings
