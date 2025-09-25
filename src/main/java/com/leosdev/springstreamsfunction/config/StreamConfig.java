@@ -1,7 +1,7 @@
 package com.leosdev.springstreamsfunction.config;
 
 import com.leosdev.springstreamsfunction.monitoring.MonitoringDecorator;
-import com.leosdev.springstreamsfunction.service.MsgProcessingService;
+import com.leosdev.springstreamsfunction.service.MessageProcessingService;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,25 +28,20 @@ public class StreamConfig {
     }
 
 
-    /**
-     * Function bean remains Flux<String> -> Flux<String>.
-     * Proxy will convert input strings into enriched Message<String>.
-     */
-    /*
     @Bean
-    public Function<Flux<Message<String>>, Flux<String>> processMessage(
+    public Function<Flux<Message<String>>, Flux<Message<String>>> processMessage(
          MessageProcessingService messageProcessingService,
          Scheduler virtualSchedulers) {
 
         return flux -> messageProcessingService
-             .processMessage(flux.publishOn(virtualSchedulers))
-             .contextWrite(Context.of("X-Monitoring-Id-Service", UUID.randomUUID().toString()));
+             .processMessage(flux.publishOn(virtualSchedulers));
+
     }
 
-     */
+
     @Bean
     public Function<Flux<Message<String>>, Flux<Message<String>>> processMessageDecorator(
-         MsgProcessingService messageProcessingService,
+         MessageProcessingService messageProcessingService,
          Scheduler virtualScheduler,
          MonitoringDecorator monitoringDecorator) {
 
@@ -59,15 +54,15 @@ public class StreamConfig {
 
     @Bean
     public Consumer<Flux<Message<String>>> consumeMessage(
-         MsgProcessingService messageProcessingService,
+         MessageProcessingService messageProcessingService,
          Scheduler virtualScheduler,
          MonitoringDecorator monitoringDecorator) {
 
-        return flux -> monitoringDecorator.wrap(
+        return monitoringDecorator.wrap(
              "consumeMessage",
-             flux.publishOn(virtualScheduler),
-             messageProcessingService::consumeMessage
-        ).subscribe();
+          flux -> flux
+            .publishOn(virtualScheduler)
+            .doOnNext(messageProcessingService::consumeMessageVoid));
     }
 
 
